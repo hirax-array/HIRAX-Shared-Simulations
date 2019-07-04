@@ -1,0 +1,127 @@
+config:
+    # Only generate Beam Transfers.
+    beamtransfers:      Yes
+    kltransform:        Yes
+    psfisher:           No
+
+    output_directory:   /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+
+    svcut: 1e-6
+    polsvcut: 1e-6
+
+telescope:
+    type:
+        class:  HIRAXSurvey
+        module: hirax_transfer.core
+
+    # Set the elevation pointings of a HIRAX survey
+    pointing_start: -10.
+    pointing_stop: 10.
+    npointings: 7
+
+    hirax_spec:
+        # Set band parameters:
+        freq_lower: 550.
+        freq_upper: 650.
+        num_freq: 64
+
+        # Other parameters (See drift.core.telescope)
+        auto_correlations: Yes
+        tsys_flat: 50.0
+        redundancy_boost: 20.0 # Approx a 1024 element array
+        dish_width: 6.0
+        lmax: 400
+        mmax: 400
+        ndays: 120 # When noise weighting is needed, will assume an integration
+                   # time of this many days.
+
+        hirax_layout: # See hirax_transfer.layouts
+            type: square_grid
+            spacing: 6.0
+            grid_size: 7
+
+        hirax_beam: # See hirax_transfer.beams
+            type: gaussian
+            diameter: 6.
+            fwhm_factor: 1.0
+
+## KL transform configuration
+## Set up the KL-filters that will be generated (there can be multiple ones as listed below).
+kltransform:
+
+    - type: DoubleKL
+      name: dk_5thresh_fg_10thresh
+      inverse: Yes  
+      threshold: 5
+      use_thermal: Yes
+      use_foregrounds: Yes
+      use_polarised: Yes
+      foreground_threshold: 10
+
+    - type: DoubleKL
+      name: dk_5thresh_fg_100thresh
+      inverse: Yes
+      threshold: 5
+      use_thermal: Yes
+      use_foregrounds: Yes
+      use_polarised: Yes
+      foreground_threshold: 100
+
+    - type: DoubleKL
+      name: dk_5thresh_fg_1000thresh
+      inverse: Yes  
+      threshold: 5
+      use_thermal: Yes
+      use_foregrounds: Yes
+      use_polarised: Yes
+      foreground_threshold: 1000
+
+    - type: DoubleKL
+      name: dk_10thresh_fg_100thresh
+      inverse: Yes
+      threshold: 10
+      use_thermal: Yes
+      use_foregrounds: Yes
+      use_polarised: Yes
+      foreground_threshold: 100
+
+    - type: DoubleKL
+      name: dk_1thresh_fg_100thresh
+      inverse: Yes
+      threshold: 1
+      use_thermal: Yes
+      use_foregrounds: Yes
+      use_polarised: Yes
+      foreground_threshold: 100
+
+    - type: KLTransform
+      name: kl_0thresh_nofg
+      inverse: Yes
+      threshold: 0
+      use_thermal: Yes
+      use_foregrounds: No
+      use_polarised: Yes
+
+    - type: KLTransform
+      name: kl_1thresh_nofg
+      inverse: Yes
+      threshold: 1
+      use_thermal: Yes
+      use_foregrounds: No
+      use_polarised: Yes
+
+    - type: KLTransform
+      name: kl_5thresh_nofg
+      inverse: Yes
+      threshold: 5
+      use_thermal: Yes
+      use_foregrounds: No
+      use_polarised: Yes
+
+    - type: KLTransform
+      name: kl_10thresh_nofg
+      inverse: Yes
+      threshold: 10
+      use_thermal: Yes
+      use_foregrounds: No
+      use_polarised: Yes

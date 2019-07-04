@@ -1,0 +1,57 @@
+config:
+    product_directory:  /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+
+    generate_modes:    Yes
+    generate_maps:     Yes
+
+    generate_klmodes: Yes
+    generate_powerspectra: No
+
+    wiener: Yes
+
+    klmodes: [dk_5thresh_fg_10thresh, dk_5thresh_fg_100thresh, dk_5thresh_fg_1000thresh, dk_10thresh_fg_100thresh, dk_1thresh_fg_100thresh, kl_0thresh_nofg, kl_1thresh_nofg, kl_5thresh_nofg, kl_10thresh_nofg]
+
+    klmaps: [dk_5thresh_fg_10thresh, dk_5thresh_fg_100thresh, dk_5thresh_fg_1000thresh, dk_10thresh_fg_100thresh, dk_1thresh_fg_100thresh, kl_0thresh_nofg, kl_1thresh_nofg, kl_5thresh_nofg, kl_10thresh_nofg]
+
+timestreams:
+    -   name:       ts
+        directory:  /data/devin/drift_ts_hirax_survey_49elem_7point_64bands
+
+        simulate:
+            maps:
+              - /data/devin/21cm_sims/double_freq/galaxy_nside_256.h5
+              - /data/devin/21cm_sims/double_freq/21cm_nside_256.h5
+
+            product_directory:  /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+            ndays:  120
+
+    -   name:       ts_nonoise
+        directory:  /data/devin/drift_ts_nonoise_hirax_survey_49elem_7point_64bands
+
+        simulate:
+            maps:
+              - /data/devin/21cm_sims/double_freq/galaxy_nside_256.h5
+              - /data/devin/21cm_sims/double_freq/21cm_nside_256.h5
+
+            product_directory:  /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+            ndays:  0
+
+    -   name:       ts_signal_only
+        directory:  /data/devin/drift_ts_signal_only_hirax_survey_49elem_7point_64bands
+
+        simulate:
+            maps:
+              - /data/devin/21cm_sims/double_freq/21cm_nside_256.h5
+
+            product_directory:  /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+            ndays:  120
+
+    -   name:       ts_nonoise_signal_only
+        directory:  /data/devin/drift_ts_nonoise_signal_only_hirax_survey_49elem_7point_64bands
+
+        simulate:
+            maps:
+              - /data/devin/21cm_sims/double_freq/21cm_nside_256.h5
+
+            product_directory:  /data/devin/drift_prod_hirax_survey_49elem_7point_64bands
+            ndays:  0

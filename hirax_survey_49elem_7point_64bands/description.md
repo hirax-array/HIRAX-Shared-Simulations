@@ -16,11 +16,19 @@
 - SVD Decompositions
 - A large set of KL transform modes with different thresholds
 
+Location: `hippo:/data/devin/hirax_shared_sims/hirax_survey_49elem_7point_64bands/drift_prod_hirax_survey_49elem_7point_64bands`
+
 ## Pipeline
 
 - SVD Maps
 - KL Maps
 - Timestreams with 21cm + galactic foregrounds with and without thermal noise
+
+Locations:
+- `hippo:/data/devin/hirax_shared_sims/hirax_survey_49elem_7point_64bands/drift_ts_hirax_survey_49elem_7point_64bands`
+- `hippo:/data/devin/hirax_shared_sims/hirax_survey_49elem_7point_64bands/drift_ts_nonoise_hirax_survey_49elem_7point_64bands`
+- `hippo:/data/devin/hirax_shared_sims/hirax_survey_49elem_7point_64bands/drift_ts_signal_only_hirax_survey_49elem_7point_64bands`
+- `hippo:/data/devin/hirax_shared_sims/hirax_survey_49elem_7point_64bands/drift_ts_nonoise_signal_only_hirax_survey_49elem_7point_64bands`
 
 # Repository Statuses
 

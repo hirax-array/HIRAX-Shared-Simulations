@@ -1,6 +1,6 @@
 # Installation
 
-The easiest way to install all the required packages is to use the provided `environment.yml` to
+The easiest way to install all the required packages is to use the provided `conda_environment/environment.yml` to
 initialise a conda environement. If you have anaconda or miniconda installed you should just be
 able to do:
 

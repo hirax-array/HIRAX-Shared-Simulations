@@ -1,0 +1,95 @@
+pipeline:
+    tasks:
+        -   type:       draco.core.task.SetMPILogging
+
+        -   type:       draco.core.io.LoadProductManager
+            out:        pm
+            params:
+                product_directory:  "bt_matrices"
+
+        -   type:       draco.core.io.LoadMaps
+            out:        imap
+            params:
+                maps:
+                    - files:
+                       - "test_map.h5"
+
+        -   type:       draco.synthesis.stream.SimulateSidereal
+            requires:   pm
+            in:         imap
+            out:        sstream
+
+        -   type:       draco.synthesis.stream.ExpandProducts
+            requires:   pm
+            in:         sstream
+            out:        sstream_expanded
+
+        -   type:       draco.synthesis.stream.MakeTimeStream
+            requires:   [sstream_expanded, pm]
+            out:        tstream
+            params:
+              start_time: 2020-01-01 00:00:00
+              end_time:   2020-01-08 00:00:00
+              integration_time: 120
+
+        -   type:       draco.synthesis.noise.GaussianNoise
+            in:         tstream
+            out:        tstream_wnoise
+            params:
+              recv_temp: 50. # Change for redundancy fac.
+              ndays: 120
+
+        -   type:       draco.analysis.sidereal.SiderealGrouper
+            requires:   pm
+            in:         tstream_wnoise
+            out:        sidereal_group
+            params:
+              padding:  0.0
+
+        -   type:       draco.analysis.sidereal.SiderealRegridder
+            requires:   pm
+            in:         sidereal_group
+            out:        sidereal_regridded
+            params:
+              samples:  512
+              # Check other params
+
+        -   type:       draco.analysis.sidereal.SiderealStacker
+            in:         sidereal_regridded
+            out:        sidereal_stacked
+
+
+        -   type:       draco.analysis.transform.CollateProducts
+            requires:   pm
+            in:         sidereal_stacked
+            out:        sidereal_stacked_collated
+            params:
+              weight: inverse_variance
+        
+        -   type:       draco.analysis.transform.MModeTransform
+            requires:   pm
+            in:         sidereal_stacked_collated
+            out:        mmodes
+
+        -   type:       draco.analysis.fgfilter.SVDModeProject
+            requires:   pm
+            in:         mmodes
+            out:        svdmodes
+
+        -   type:       draco.analysis.fgfilter.KLModeProject
+            requires:   pm
+            in:         svdmodes
+            out:        klmodes
+            params:
+                klname:  kl_0thresh_fg_0thresh_128
+                threshold: 0.0
+
+        -   type:       draco.analysis.powerspectrum.QuadraticPSEstimation
+            requires:   pm
+            in:         klmodes
+            out:        psmc
+            params:
+                psname: psmc_kl_0thresh_fg_0thresh_128
+                pstype: unwindowed
+                save:   Yes
+                output_root: 'psmc_unwindowed_wnoise_fgfilter_'

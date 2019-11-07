@@ -1,0 +1,80 @@
+config:
+    # Only generate Beam Transfers.
+    beamtransfers:      Yes
+    kltransform:        Yes
+    psfisher:           Yes
+
+    output_directory:   bt_matrices
+
+telescope:
+    type:
+        # Mechanism to specify a custom class
+        class:  HIRAXSurvey
+        module: hirax_transfer.core
+
+    # For a single pointing use:
+    #
+    pointing_start: 0
+    pointing_stop: 0
+    npointings: 1
+
+    hirax_spec:
+        # Set band parameters:
+        freq_lower: 600.
+        #freq_upper: 600.4
+        num_freq: 2
+        freq_upper: 600.78125 #600. + num_freq*400/1024
+        # Other parameters (See drift.core.telescope)
+        auto_correlations: Yes
+        tsys_flat: 50.0
+        dish_width: 6.0
+        lmax: 200
+        mmax: 200
+        #ndays: 733 # When noise weighting is needed, will assume an integration
+                   # time of this many days.
+
+        hirax_layout: # See hirax_transfer.layouts
+            type: square_grid
+            spacing: 6.0
+            grid_size: 2
+
+            # Can alternatively read arbitrary layout from a text file with
+            # columns: EW offset [m], NS offset [m] by doing:
+            # 
+            # type: file
+            # filename: layout.txt
+
+        hirax_beam: # See hirax_transfer.beams
+            type: gaussian
+            diameter: 6.
+            fwhm_factor: 1.0
+
+kltransform:
+
+    - type: KLTransform
+      name: kl_0thresh_fg_0thresh_128
+      inverse: Yes
+      threshold: 0
+      use_thermal: Yes
+      use_foregrounds: No
+      use_polarised: No
+
+## PS Estimator configuration
+## Set up the PS Estimators that will be generated.
+psfisher:
+    -   type:           MonteCarlo
+        name:           psmc_kl_0thresh_fg_0thresh_128
+        klname:         kl_0thresh_fg_0thresh_128
+        threshold:      0
+        bandtype:       cartesian
+        kpar_bands:
+        -   spacing:    linear
+            start:      0.0
+            stop:       0.30                   #kept it similar to shaw
+            num:        3
+        
+        kperp_bands:
+        -   spacing:    linear
+            start:      0.0
+            stop:       0.15                   #corresponds to l=426
+            num:        3
